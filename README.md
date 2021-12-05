@@ -1,4 +1,4 @@
-#Balanced Tournament Armor
+# Balanced Tournament Armor
 This is a simple mod that is partly inspired by the now-defunct Tournament Fair Armour.
 
 In the vanilla game, tournament participants wear the armor that they normally wear in battles.
