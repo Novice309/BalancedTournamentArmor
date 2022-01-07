@@ -1,12 +1,12 @@
-﻿using System;
+﻿using HarmonyLib;
+using SandBox;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using HarmonyLib;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
-using SandBox;
 
 namespace BalancedTournamentArmor
 {
