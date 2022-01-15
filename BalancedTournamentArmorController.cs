@@ -2,7 +2,6 @@
 using SandBox;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Reflection.Emit;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.Core;
@@ -36,12 +35,12 @@ namespace BalancedTournamentArmor
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
             for (int i = 0; i < codes.Count; i++)
             {
-                if (codes[i].operand is MethodInfo method && method == AccessTools.Method(typeof(CharacterObject), "get_RandomBattleEquipment"))
+                if (codes[i].opcode == OpCodes.Stloc_0)
                 {
-                    codes[i].operand = AccessTools.Method(typeof(BalancedTournamentArmorController), "get_RandomBattleEquipment");
-                    codes[i].opcode = OpCodes.Call;
-                    codes[i - 1].opcode = OpCodes.Nop;
+                    codes[i - 3].opcode = OpCodes.Nop;
                     codes[i - 2].opcode = OpCodes.Nop;
+                    codes[i - 1].opcode = OpCodes.Call;
+                    codes[i - 1].operand = AccessTools.Method(typeof(BalancedTournamentArmorController), "get_RandomBattleEquipment");
                 }
             }
             return codes;
