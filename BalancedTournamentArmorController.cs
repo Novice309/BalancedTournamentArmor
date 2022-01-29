@@ -29,7 +29,7 @@ namespace BalancedTournamentArmor
         }
         [HarmonyTranspiler]
         [HarmonyPatch("AddRandomClothes")]
-        // Replace the vanilla armor worn by agents with either basic troop armor or basic noble troop armor.
+        // Replace the vanilla armor worn by agents.
         private static IEnumerable<CodeInstruction> Transpiler2(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
@@ -37,10 +37,8 @@ namespace BalancedTournamentArmor
             {
                 if (codes[i].opcode == OpCodes.Stloc_0)
                 {
-                    codes[i - 3].opcode = OpCodes.Nop;
-                    codes[i - 2].opcode = OpCodes.Nop;
                     codes[i - 1].opcode = OpCodes.Call;
-                    codes[i - 1].operand = AccessTools.Method(typeof(BalancedTournamentArmorController), "get_RandomBattleEquipment");
+                    codes[i - 1].operand = AccessTools.Method(typeof(BalancedTournamentArmorController), "RandomBattleEquipment", new Type[] { typeof(CharacterObject) });
                 }
             }
             return codes;
@@ -53,8 +51,8 @@ namespace BalancedTournamentArmor
                 agent.Health = character.HeroObject.MaxHitPoints;
             }
         }
-        // Get either the basic troop armor or basic noble troop armor of the current settlement's culture.
-        public static Equipment RandomBattleEquipment => !_settings.ShouldWearNobleArmor ? Settlement.CurrentSettlement.Culture.BasicTroop.RandomBattleEquipment : Settlement.CurrentSettlement.Culture.EliteBasicTroop.RandomBattleEquipment;
+        // Get the armor of the agent's formation group with the current settlement's culture.
+        public static Equipment RandomBattleEquipment(CharacterObject character) => CharacterObject.FindAll(c => c.Culture == Settlement.CurrentSettlement.Culture && c.IsSoldier && c.DefaultFormationGroup == character.DefaultFormationGroup && c.Tier == _settings.TroopTierOfArmor).GetRandomElementInefficiently().RandomBattleEquipment;
         private static BalancedTournamentArmorSettings _settings;
     }
 }
