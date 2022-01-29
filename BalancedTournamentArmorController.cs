@@ -37,8 +37,10 @@ namespace BalancedTournamentArmor
             {
                 if (codes[i].opcode == OpCodes.Stloc_0)
                 {
+                    codes[i - 3].opcode = OpCodes.Nop;
+                    codes[i - 2].opcode = OpCodes.Nop;
                     codes[i - 1].opcode = OpCodes.Call;
-                    codes[i - 1].operand = AccessTools.Method(typeof(BalancedTournamentArmorController), "RandomBattleEquipment", new Type[] { typeof(CharacterObject) });
+                    codes[i - 1].operand = AccessTools.Method(typeof(BalancedTournamentArmorController), "get_RandomBattleEquipment");
                 }
             }
             return codes;
@@ -51,8 +53,19 @@ namespace BalancedTournamentArmor
                 agent.Health = character.HeroObject.MaxHitPoints;
             }
         }
-        // Get the armor of the agent's formation group with the current settlement's culture.
-        public static Equipment RandomBattleEquipment(CharacterObject character) => CharacterObject.FindAll(c => c.Culture == Settlement.CurrentSettlement.Culture && c.IsSoldier && c.DefaultFormationGroup == character.DefaultFormationGroup && c.Tier == _settings.TroopTierOfArmor).GetRandomElementInefficiently().RandomBattleEquipment;
+        // Get the armor of the current settlement's culture.
+        public static Equipment RandomBattleEquipment
+        {
+            get
+            {
+                CharacterObject[] charactersOfTier = new CharacterObject[_settings.TroopTierOfArmor];
+                for (int i = 0; i < charactersOfTier.Length; i++)
+                {
+                    charactersOfTier[i] = i == 0 ? Settlement.CurrentSettlement.Culture.BasicTroop : charactersOfTier[i - 1].UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry);
+                }
+                return charactersOfTier[_settings.TroopTierOfArmor - 1].RandomBattleEquipment;
+            }
+        }
         private static BalancedTournamentArmorSettings _settings;
     }
 }
