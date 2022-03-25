@@ -23,20 +23,20 @@ namespace BalancedTournamentArmor
         {
             get
             {
-                BalancedTournamentArmorSettings settings = BalancedTournamentArmorSettings.Instance;
-                CharacterObject[] characters = new CharacterObject[settings.TroopTierOfArmor];
-                for (int i = 0; i < characters.Length; i++)
+                int tier = BalancedTournamentArmorSettings.Instance.TroopTierOfArmor;
+                CharacterObject[] characters = new CharacterObject[tier + 1];
+                for (int i = 1; i < characters.Length; i++)
                 {
-                    if (i <= 2 || (i > 2 && !_isDeReMilitariLoaded))
+                    if (i <= 3 || (i > 3 && !_isDeReMilitariLoaded))
                     {
-                        characters[i] = i == 0 ? Settlement.CurrentSettlement.Culture.BasicTroop : characters[i - 1].UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry);
+                        characters[i] = i == 1 ? Settlement.CurrentSettlement.Culture.BasicTroop : characters[i - 1].UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry);
                     }
                     else
                     {
-                        characters[i] = i == 3 ? Settlement.CurrentSettlement.Culture.EliteBasicTroop : characters[i - 1].UpgradeTargets.GetRandomElement();
+                        characters[i] = i == 4 ? Settlement.CurrentSettlement.Culture.EliteBasicTroop : characters[i - 1].UpgradeTargets.GetRandomElement();
                     }
                 }
-                return characters[settings.TroopTierOfArmor - 1].RandomBattleEquipment;
+                return characters[tier].RandomBattleEquipment;
             }
         }
 
