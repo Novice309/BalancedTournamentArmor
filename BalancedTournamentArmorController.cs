@@ -7,7 +7,6 @@ using System.Reflection.Emit;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.Core;
-using TaleWorlds.Engine;
 using TaleWorlds.MountAndBlade;
 
 namespace BalancedTournamentArmor
@@ -15,41 +14,21 @@ namespace BalancedTournamentArmor
     [HarmonyPatch(typeof(TournamentFightMissionController))]
     public class BalancedTournamentArmorController
     {
-        private static bool _isDeReMilitariLoaded;
-
         // Get troop armors of the current settlement's culture.
-        // If the setting is above tier 3 and De Re Militari is loaded, get noble troop armors instead to prevent a crash.
+        // If basic troops are not found, get the armor of noble troops instead to prevent a crash.
         public static Equipment RandomBattleEquipment
         {
             get
             {
                 int tier = BalancedTournamentArmorSettings.Instance.TroopTierOfArmor;
-                CharacterObject[] characters = new CharacterObject[tier + 1];
-                for (int i = 1; i < characters.Length; i++)
+                List<CharacterObject> troops = new List<CharacterObject>();
+                List<CharacterObject> eliteTroops = new List<CharacterObject>();
+                for (int i = 0; i < tier; i++)
                 {
-                    if (i <= 3 || (i > 3 && !_isDeReMilitariLoaded))
-                    {
-                        characters[i] = i == 1 ? Settlement.CurrentSettlement.Culture.BasicTroop : characters[i - 1].UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry);
-                    }
-                    else
-                    {
-                        characters[i] = i == 4 ? Settlement.CurrentSettlement.Culture.EliteBasicTroop : characters[i - 1].UpgradeTargets.GetRandomElement();
-                    }
+                    troops.Add(i == 0 ? Settlement.CurrentSettlement.Culture.BasicTroop : troops[i - 1]?.UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry));
+                    eliteTroops.Add(i == 0 ? Settlement.CurrentSettlement.Culture.EliteBasicTroop : eliteTroops[i - 1]?.UpgradeTargets.GetRandomElement());
                 }
-                return characters[tier].RandomBattleEquipment;
-            }
-        }
-
-        // Check whether De Re Militari is loaded.
-        [HarmonyPatch(MethodType.Constructor, new Type[] { typeof(CultureObject) })]
-        public static void Postfix()
-        {
-            foreach (string moduleName in Utilities.GetModulesNames())
-            {
-                if (moduleName == "DeReMilitari")
-                {
-                    _isDeReMilitariLoaded = true;
-                }
+                return (troops.Find(troop => troop != null && troop.Tier == tier) ?? eliteTroops.Find(troop => troop != null && troop.Tier == tier)).RandomBattleEquipment;
             }
         }
 
