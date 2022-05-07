@@ -23,10 +23,11 @@ namespace BalancedTournamentArmor
                 int tier = BalancedTournamentArmorSettings.Instance.TroopTierOfArmor;
                 List<CharacterObject> troops = new List<CharacterObject>();
                 List<CharacterObject> eliteTroops = new List<CharacterObject>();
+                CultureObject culture = Settlement.CurrentSettlement.Culture;
                 for (int i = 0; i < tier; i++)
                 {
-                    troops.Add(i == 0 ? Settlement.CurrentSettlement.Culture.BasicTroop : troops[i - 1]?.UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry));
-                    eliteTroops.Add(i == 0 ? Settlement.CurrentSettlement.Culture.EliteBasicTroop : eliteTroops[i - 1]?.UpgradeTargets.GetRandomElement());
+                    troops.Add(i == 0 ? culture.BasicTroop : troops[i - 1]?.UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry));
+                    eliteTroops.Add(i == 0 ? culture.EliteBasicTroop : eliteTroops[i - 1]?.UpgradeTargets.GetRandomElement());
                 }
                 return (troops.Find(troop => troop != null && troop.Tier == tier) ?? eliteTroops.Find(troop => troop != null && troop.Tier == tier)).RandomBattleEquipment;
             }
