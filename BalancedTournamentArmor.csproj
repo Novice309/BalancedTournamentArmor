@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BalancedTournamentArmorController.cs" />
+    <Compile Include="BalancedTournamentArmorModel.cs" />
     <Compile Include="BalancedTournamentArmorSubModule.cs" />
     <Compile Include="BalancedTournamentArmorSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
