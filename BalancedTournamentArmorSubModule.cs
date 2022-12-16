@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
+using System.Linq;
 using TaleWorlds.CampaignSystem;
+using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.Core;
 using TaleWorlds.MountAndBlade;
 
@@ -15,7 +17,7 @@ namespace BalancedTournamentArmor
             if (game.GameType is Campaign)
             {
                 CampaignGameStarter campaignStarter = (CampaignGameStarter)gameStarter;
-                campaignStarter.AddModel(new BalancedTournamentArmorModel());
+                campaignStarter.AddModel(new BalancedTournamentArmorModel((TournamentModel)campaignStarter.Models.ToList().FindLast(model => model is TournamentModel)));
             }
         }
     }
