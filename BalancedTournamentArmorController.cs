@@ -8,19 +8,19 @@ using TaleWorlds.MountAndBlade;
 
 namespace BalancedTournamentArmor
 {
-    [HarmonyPatch(typeof(TournamentFightMissionController))]
+    [HarmonyPatch(typeof(TournamentFightMissionController), "SpawnAgentWithRandomItems")]
     public class BalancedTournamentArmorController
     {
         // Get the hero agent to heal to full HP.
-        [HarmonyTranspiler]
-        [HarmonyPatch("SpawnAgentWithRandomItems")]
-        private static IEnumerable<CodeInstruction> Transpiler1(IEnumerable<CodeInstruction> instructions)
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
         {
             List<CodeInstruction> codes = new List<CodeInstruction>(instructions);
-            List<CodeInstruction> codesToInsert = new List<CodeInstruction>();
-            codesToInsert.Add(new CodeInstruction(OpCodes.Ldloc_0));
-            codesToInsert.Add(new CodeInstruction(OpCodes.Ldloc_2));
-            codesToInsert.Add(new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(BalancedTournamentArmorController), "HealHeroAgent", new Type[] { typeof(CharacterObject), typeof(Agent) })));
+            List<CodeInstruction> codesToInsert = new List<CodeInstruction>
+            {
+                new CodeInstruction(OpCodes.Ldloc_0),
+                new CodeInstruction(OpCodes.Ldloc_2),
+                new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(BalancedTournamentArmorController), "HealHeroAgent", new Type[] { typeof(CharacterObject), typeof(Agent) }))
+            };
             codes.InsertRange(codes.Count - 1, codesToInsert);
             return codes;
         }

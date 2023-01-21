@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using SandBox.Tournaments.MissionLogics;
+using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.TournamentGames;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
+using TaleWorlds.MountAndBlade;
 
 namespace BalancedTournamentArmor
 {
@@ -18,23 +20,25 @@ namespace BalancedTournamentArmor
         // If basic troops are not found, get the armor of noble troops instead.
         public override Equipment GetParticipantArmor(CharacterObject participant)
         {
-            Equipment equipment;
-            int tier = BalancedTournamentArmorSettings.Instance.TroopTierOfArmor;
-            List<CharacterObject> troops = new List<CharacterObject>();
-            List<CharacterObject> eliteTroops = new List<CharacterObject>();
-            CultureObject culture = Settlement.CurrentSettlement.Culture;
-            for (int i = 0; i < tier; i++)
+            Equipment equipment = null;
+            if (Mission.Current.HasMissionBehavior<TournamentBehavior>())
             {
-                troops.Add(i == 0 ? culture.BasicTroop : troops[i - 1]?.UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry));
-                eliteTroops.Add(i == 0 ? culture.EliteBasicTroop : eliteTroops[i - 1]?.UpgradeTargets.GetRandomElement());
+                int tier = BalancedTournamentArmorSettings.Instance.TroopTierOfArmor;
+                List<CharacterObject> troops = new List<CharacterObject>();
+                List<CharacterObject> eliteTroops = new List<CharacterObject>();
+                CultureObject culture = Settlement.CurrentSettlement.Culture;
+                for (int i = 0; i < tier; i++)
+                {
+                    troops.Add(i == 0 ? culture.BasicTroop : troops[i - 1]?.UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry));
+                    eliteTroops.Add(i == 0 ? culture.EliteBasicTroop : eliteTroops[i - 1]?.UpgradeTargets.GetRandomElement());
+                }
+                equipment = (troops.Find(troop => troop != null && troop.Tier == tier) ?? eliteTroops.Find(troop => troop != null && troop.Tier == tier))?.RandomBattleEquipment;
+                if (equipment == null)
+                {
+                    InformationManager.DisplayMessage(new InformationMessage("Unable to change armor of tournament participants!"));
+                }
             }
-            equipment = (troops.Find(troop => troop != null && troop.Tier == tier) ?? eliteTroops.Find(troop => troop != null && troop.Tier == tier)).RandomBattleEquipment;
-            if (equipment != null)
-            {
-                return equipment;
-            }
-            InformationManager.DisplayMessage(new InformationMessage("Unable to change armor of tournament participants!"));
-            return _model.GetParticipantArmor(participant);
+            return equipment ?? _model.GetParticipantArmor(participant);
         }
 
         public override TournamentGame CreateTournament(Town town) => _model.CreateTournament(town);
