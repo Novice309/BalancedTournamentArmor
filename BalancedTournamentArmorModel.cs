@@ -1,5 +1,4 @@
-﻿using SandBox.Tournaments.MissionLogics;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Settlements;
@@ -21,7 +20,7 @@ namespace BalancedTournamentArmor
         public override Equipment GetParticipantArmor(CharacterObject participant)
         {
             Equipment equipment = null;
-            if (Mission.Current.HasMissionBehavior<TournamentBehavior>())
+            if (Mission.Current.Mode == MissionMode.Tournament)
             {
                 int tier = BalancedTournamentArmorSettings.Instance.TroopTierOfArmor;
                 List<CharacterObject> troops = new List<CharacterObject>();
