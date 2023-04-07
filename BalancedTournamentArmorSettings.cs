@@ -18,8 +18,8 @@ namespace BalancedTournamentArmor
         [SettingPropertyGroup("HP", GroupOrder = 0)]
         public bool ShouldHealHeroAgents { get; set; } = true;
 
-        [SettingPropertyInteger("Troop Tier of Armor", 1, 5, "0", Order = 0, RequireRestart = false, HintText = "Troop tier of the armor worn by participants. Default is 1.")]
+        [SettingPropertyInteger("Troop Tier", 1, 6, "0", Order = 0, RequireRestart = false, HintText = "Troop tier for armor worn by tournament participants. Default is 1.")]
         [SettingPropertyGroup("Armor", GroupOrder = 1)]
-        public int TroopTierOfArmor { get; set; } = 1;
+        public int TroopTier { get; set; } = 1;
     }
 }

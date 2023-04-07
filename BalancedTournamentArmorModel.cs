@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using TaleWorlds.CampaignSystem;
+﻿using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ComponentInterfaces;
 using TaleWorlds.CampaignSystem.Settlements;
 using TaleWorlds.CampaignSystem.TournamentGames;
@@ -16,25 +15,15 @@ namespace BalancedTournamentArmor
         public BalancedTournamentArmorModel(TournamentModel model) => _model = model;
 
         // Get troop armors of the current settlement's culture.
-        // If basic troops are not found, get the armor of noble troops instead.
         public override Equipment GetParticipantArmor(CharacterObject participant)
         {
             Equipment equipment = null;
             if (Mission.Current.Mode == MissionMode.Tournament)
             {
-                int tier = BalancedTournamentArmorSettings.Instance.TroopTierOfArmor;
-                List<CharacterObject> troops = new List<CharacterObject>();
-                List<CharacterObject> eliteTroops = new List<CharacterObject>();
-                CultureObject culture = Settlement.CurrentSettlement.Culture;
-                for (int i = 0; i < tier; i++)
-                {
-                    troops.Add(i == 0 ? culture.BasicTroop : troops[i - 1]?.UpgradeTargets.GetRandomElementWithPredicate(character => character.IsInfantry));
-                    eliteTroops.Add(i == 0 ? culture.EliteBasicTroop : eliteTroops[i - 1]?.UpgradeTargets.GetRandomElement());
-                }
-                equipment = (troops.Find(troop => troop != null && troop.Tier == tier) ?? eliteTroops.Find(troop => troop != null && troop.Tier == tier))?.RandomBattleEquipment;
+                equipment = CharacterObject.FindAll(character => character.Culture == Settlement.CurrentSettlement.Culture && character.Tier == BalancedTournamentArmorSettings.Instance.TroopTier && character.IsSoldier && !character.HiddenInEncylopedia && !character.StringId.Contains("conspiracy") && !character.StringId.Contains("tutorial") && !character.StringId.Contains("canticles")).GetRandomElementInefficiently()?.RandomBattleEquipment;
                 if (equipment == null)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage("Unable to change armor of tournament participants!"));
+                    InformationManager.DisplayMessage(new InformationMessage("Unable to change armor of " + participant.Name + "!"));
                 }
             }
             return equipment ?? _model.GetParticipantArmor(participant);
