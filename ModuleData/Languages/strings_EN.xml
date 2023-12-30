@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="English" />
+  </tags>
+  <strings>
+    <string id="BTAjOwRmll" text="Troop Tier" />
+    <string id="BTAR01o5du" text="Troop tier for armor worn by tournament participants. Default is 1." />
+    <string id="BTAuNk1YN6" text="Armor" />
+    <string id="BTA9AgN3sY" text="Heal Heroes to Full HP" />
+    <string id="BTAyLqbQrp" text="Heal nobles, companions and the player to full HP. HP will revert after the tournament. Enabled by default." />
+    <string id="BTA0df67e5" text="HP" />
+    <string id="BTATcr8DlA" text="Unable to change armor of {name}!" />
+  </strings>
+</base>

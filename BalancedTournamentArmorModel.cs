@@ -5,6 +5,8 @@ using TaleWorlds.CampaignSystem.TournamentGames;
 using TaleWorlds.Core;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
+using TaleWorlds.Localization;
+using System.Collections.Generic;
 
 namespace BalancedTournamentArmor
 {
@@ -25,7 +27,7 @@ namespace BalancedTournamentArmor
 
                 if (equipment == null)
                 {
-                    InformationManager.DisplayMessage(new InformationMessage("Unable to change armor of " + participant.Name + "!"));
+                    InformationManager.DisplayMessage(new InformationMessage(new TextObject("{=BTATcr8DlA}Unable to change armor of {name}!", new Dictionary<string, object>() { { "name" , participant.Name } }).ToString()));
                 }
             }
 
