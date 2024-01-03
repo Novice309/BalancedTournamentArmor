@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="日本語" />
+  </tags>
+  <strings>
+    <string id="BTAjOwRmll" text="兵士のTier" />
+    <string id="BTAR01o5du" text="競技会の参加者が、指定された兵士Tierの着る防具を着ます。デフォルトは「1」です。" />
+    <string id="BTAuNk1YN6" text="鎧" />
+    <string id="BTA9AgN3sY" text="ヒーローのHPの全回復" />
+    <string id="BTAyLqbQrp" text="貴族・仲間・プレイヤーのHPを全回復させた状態で参加させます。競技会終了後に、元の値に戻ります。デフォルトは「有効」です。" />
+    <string id="BTA0df67e5" text="HP" />
+    <string id="BTATcr8DlA" text="{name}の鎧を変更できない!" />
+  </strings>
+</base>
