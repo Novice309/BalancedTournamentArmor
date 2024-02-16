@@ -16,7 +16,5 @@ namespace BalancedTournamentArmor
                 gameStarterObject.AddModel(new BalancedTournamentArmorModel((TournamentModel)gameStarterObject.Models.Last(model => model is TournamentModel)));
             }
         }
-
-        public override void OnBeforeMissionBehaviorInitialize(Mission mission) => mission.AddMissionBehavior(new BalancedTournamentArmorMissionBehavior());
     }
 }
