@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<base xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" type="string">
+  <tags>
+    <tag language="Türkçe" />
+  </tags>
+  <strings>
+    <string id="BTAjOwRmll" text="Birlik Seviyesi" />
+    <string id="BTAR01o5du" text="Turnuva katılımcıları tarafından giyilen zırhlar için birlik seviyesi. Kısaca zırh seviyesi. Varsayılan değer 1." />
+    <string id="BTAuNk1YN6" text="Zırh" />
+    <string id="BTATcr8DlA" text="{name} adlı kişinin zırhı değiştirilemiyor!" />
+  </strings>
+</base>
